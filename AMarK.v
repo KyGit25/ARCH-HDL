@@ -21,9 +21,15 @@ module AMarK(A, B, C, D, y, clock, reset);
     wire DA, DB, DC, DD; 
 
     // assignment of D FF inputs
-    assign DA = ((~B & ~C & ~D & ~y) | (B & C & ~D & y));;
-    assign DB = ((~C & ~D & ~y) | (C & ~D & y));
-    assign DC = ~D;
+    assign DA = (y & ((~A & ~B & C & D) | (~A & B & ~C) | (~A & B & ~D))) | 
+            (~y & ((~A & ~B & ~C) | (~A & ~B & ~D) | (~A & B & C & D)));
+
+    assign DB = (y & ((~A & ~C & D) | (~A & C & ~D))) | 
+            (~y & ((~A & ~C & ~D) | (~A & C & D)));
+
+    assign DC = (y & (~A & ~D)) | 
+            (~y & (~A & D));
+
     assign DD = 1'b0;
 
     // Instantiation of D FF
